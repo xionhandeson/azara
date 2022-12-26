@@ -1,0 +1,68 @@
+{
+  "name": "azara",
+  "version": "1.0.0",
+  "description": "azara calculator",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "install-app-deps",
+    "start": "electron-forge start",
+    "rebuild": "electron-rebuild -f -w -sqlite3",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "keywords": [],
+  "author": "handeson",
+  "license": "ISC",
+  "dependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.9",
+    "body-parser": "^1.20.0",
+    "bootstrap": "^5.2.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "express": "^4.18.1",
+    "express-handlebars": "^6.0.6",
+    "handlebars": "^4.7.7",
+    "hbs": "^4.2.0",
+    "jquery": "^3.6.1",
+    "pdfkit": "^0.13.0",
+    "pdfkit-table": "^0.1.99",
+    "sqlite3": "^5.0.11"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.65",
+    "@electron-forge/maker-deb": "^6.0.0-beta.65",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.65",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.65",
+    "@electron-forge/maker-zip": "^6.0.0-beta.65",
+    "electron": "^20.1.0",
+    "electron-builder": "^23.3.3",
+    "electron-rebuild": "^3.2.9"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "azara"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  }
+}

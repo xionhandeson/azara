@@ -1,0 +1,193 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Azara</title>
+  <link href="assets/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+  <div class="container">
+    <h2 style="text-align: center;"></h2>
+  </div>
+  <!-- Add Product -->
+  <div class="container" style="text-align: right;">
+    <form action="/save" method="post">
+      <button type="button" id="add_product" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+        Add Product
+      </button>
+
+      <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group" style="margin-bottom: 10px;">
+                  <input type="text" id="addProductInput" name="code" class="form-control" placeholder="Product Code">
+              </div>
+
+              <div class="form-group" style="margin-bottom: 10px;">
+                  <input type="text" name="quantity" class="form-control" placeholder="Quantity">
+              </div>
+
+              <div class="form-group" style="margin-bottom: 10px;">
+                  <input type="text" id="created_date" name="created_date" class="form-control">
+              </div>
+
+              <div class="form-group" style="margin-bottom: 10px;">
+                  <textarea name="description" class="form-control" placeholder="Description"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Confirm</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <form action="/search_product_by_code" method="post">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#searchProductModal">
+          Search Product
+      </button>
+
+      <!-- Search Product -->
+      <div class="modal fade" id="searchProductModal" tabindex="-1" aria-labelledby="searchProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="searchProductModalLabel">Search Product</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group" style="margin-bottom: 10px;">
+                  <input type="text" name="code" id="searchProductInput" class="form-control" placeholder="Product Code">
+              </div>
+              <p style="text-align: left;">OR by Multiple Codes</p>
+              <div class="form-group" style="margin-bottom: 10px;" >
+                  <input type="text" name="codes" id="codes" class="form-control" placeholder="Product Codes, example:MA1,MA2,... comma is important">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Confirm</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- Download PDF -->
+    <button type="button" id="download_pdf" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#downloadPDFModal">
+      Download PDF
+    </button>
+    <div class="modal fade" id="downloadPDFModal" tabindex="-1" aria-labelledby="downloadPDFModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="downloadPDFModalLabel">Download PDF</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-footer" style="text-align: left; display: block">
+            <form action="/download_pdf" method="post">
+              <div class="col-md-6">
+                <input type="submit" class="btn btn-primary" class="form-control" value="All">
+                <input type="hidden" name="download_all" value="all">
+              </div>
+            </form>
+            <form action="/download_pdf" method="post">
+              <div class="col-md-6">
+                <input type="submit" class="btn btn-primary" class="form-control" value="Exclude 0 stock balance">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Download PDF End-->
+  </div>
+  <div class="container">
+    <h3>Product List</h3>
+    <p>Clear search product fields to refresh table</p>
+    <table class="table table-striped" style="font-size: 20px">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Stock Balance</th>
+          <th>Description</th>
+          <th>Added Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each products}}
+        <tr>
+          <td>{{ code }}</td>
+          <td>{{ quantity }}</td>
+          <td>{{ description }}</td>
+          <td>{{ created_date }}</td>
+          <td>
+            <div class="btn-group" role="group">
+              <div class="col-md-6" style="padding-right: 5px;">
+                <form action="/search_product_by_code" method="post">
+                  <input type="submit" class="btn btn-secondary btn-sm" class="form-control" value="View">
+                  <input type="hidden" name="code" value='{{ code }}'>
+                </form>
+              </div>
+              <div class="col-md-6">
+                <button type="button" id="update_product_{{@index}}" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#UpdateProductTransactionModal_{{@index}}">
+                  Edit
+                </button>
+              </div>
+              <div class="col-md-6">
+                <form action="/delete_product" method="post">
+                  <input type="submit" class="btn btn-danger btn-sm" onclick="if (!confirm('Are you sure?')) { return false }" class="form-control" value="Delete">
+                  <input type="hidden" name="id" value={{ id }}>
+                </form>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <div class="modal fade" id="UpdateProductTransactionModal_{{@index}}" tabindex="-1" aria-labelledby="UpdateModalLabel_{{@index}}" aria-hidden="true">
+          <form id="update_product_form_{{@index}}" action="/update_product_by_code" method="post">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="UpdateModalLabel_{{@index}}">Edit Product</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="text" name="code" class="form-control" value='{{ code }}' readonly>
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="text" name="quantity" class="form-control" value={{ quantity }}>
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="text" name="created_date" class="form-control" value={{ created_date }}>
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 10px;">
+                      <textarea name="description" class="form-control">{{ description }} </textarea>
+                  </div>
+                  <input type="hidden" name="id" value={{ id }}>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <input type="submit" class="btn btn-primary" value="Confirm">
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+<script src="assets/js/jquery.js"></script>
+<script src="assets/js/bootstrap.js"></script>
+<script src="assets/js/azara.js"></script>
+</body>
+</html>
