@@ -1,6 +1,6 @@
-const helper = require('./helper');
-const product_pdf = require('./product_pdf');
-const product_transaction_pdf = require('./product_transaction_pdf');
+const helper = require('../utils/helper');
+const product_pdf = require('../services/ProductPdfService');
+const product_transaction_pdf = require('../services/ProductTransactionPdfService');
 
 //Create connection
 const sqlite3 = require('sqlite3').verbose();

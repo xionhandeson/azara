@@ -7,8 +7,10 @@ const hbs = require('hbs');
 //use bodyParser middleware
 const bodyParser = require('body-parser');
 const api = express();
-const product_api = require('./public/js/api');
-const pdf_api = require('./public/js/pdf_api');
+const product_api = require('./controller/ProductController');
+const product_transaction_api = require('./controller/ProductTransactionController');
+const home_api = require('./controller/HomeController');
+const pdf_api = require('./controller/PdfController');
 
 //Set Electron
 const { app, BrowserWindow } = require('electron')
@@ -49,34 +51,22 @@ api.use(bodyParser.urlencoded({ extended: false }));
 //set public folder as static folder for static file
 api.use('/assets',express.static(__dirname + '/public'));
 
-//route for homepage
-product_api.load_homepage(api)
+//Homepage
+home_api.load_homepage(api)
 
-//get product by code
-product_api.search_product_by_code(api)
-
-//insert data
+//Product
 product_api.insert_product(api)
-
-//update product quantity
-product_api.update_product_quantity(api)
-
-//update product
+product_api.search_product_by_code(api)
 product_api.update_product_by_code(api)
-
-//update product transaction
-product_api.update_product_transaction(api)
-
-//delete product transaction
-product_api.delete_product_transaction(api)
-
-//delete product
 product_api.delete_product(api)
 
-//download product pdf
-pdf_api.download_product_pdf(api)
+//Product Transaction
+product_transaction_api.update_product_quantity(api)
+product_transaction_api.update_product_transaction(api)
+product_transaction_api.delete_product_transaction(api)
 
-//download product transaction pdf
+//PDF
+pdf_api.download_product_pdf(api)
 pdf_api.download_product_transaction_pdf(api)
 
 //server listening

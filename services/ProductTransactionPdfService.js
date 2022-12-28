@@ -12,6 +12,7 @@ function buildPDF(product_transactions, product, dataCallback, endCallback) {
 	filtered_product_transaction_array = [];
 	total_quantity_in = 0;
 	total_quantity_out = 0;
+
 	product_transactions.forEach((product_transaction) => {
 		product_transaction_array.push(product_transaction.quantity_in, product_transaction.quantity_out, product_transaction.description.replace('\r\n', ""), product_transaction.created_date);
 		total_quantity_in += parseInt(product_transaction.quantity_in);
@@ -20,8 +21,6 @@ function buildPDF(product_transactions, product, dataCallback, endCallback) {
 	while(product_transaction_array.length) {
 		filtered_product_transaction_array.push(product_transaction_array.splice(0,4))
   }
-
-	console.log(filtered_product_transaction_array);
 
   const table01 = {
 		"headers" : ["Quantity In", "Quantity Out", "Description", "Added Date"],
