@@ -3,18 +3,8 @@ const { dialog } = require("electron");
 const sql = require('../utils/SqlConstants');
 const product_service = require('../services/ProductService');
 
-//Create connection
-const sqlite3 = require('sqlite3').verbose();
-
-// open database in memory
-let db = new sqlite3.Database('./azara.db', (err) => {
-  if (err) {
-    return console.error(err.message);
-  }
-});
-
 module.exports = {
-	search_product_by_code: function(api){
+	search_product_by_code: function(api, db){
 		api.post('/search_product_by_code',(req, res) => {
 			if (req.body.code == '' && req.body.codes == '') {
 				res.redirect('/');
@@ -30,7 +20,7 @@ module.exports = {
 			}
 		});
 	},
-	insert_product: function(api){
+	insert_product: function(api, db){
 		api.post('/save',(req, res) => {
 			let created_date = req.body.created_date == null || req.body.created_date == '' ? helper.created_date() : req.body.created_date;
 			let data = [req.body.code.toUpperCase(), req.body.quantity, req.body.description, created_date];
@@ -60,7 +50,7 @@ module.exports = {
 			});
 		});
 	},
-	update_product_by_code: function(api) {
+	update_product_by_code: function(api, db) {
 		api.post('/update_product_by_code',(req, res) => {
 			if(req.body.code == '' || req.body.code == null) {
 			  dialog.showErrorBox("Error", "Product Code cannot be empty")
@@ -114,7 +104,7 @@ module.exports = {
 			});
 		});
 	},
-	delete_product: function(api) {
+	delete_product: function(api, db) {
 		api.post('/delete_product',(req, res) => {
 			let sql = "DELETE FROM Product where id=?";
 			let get_product_transaction_sql = "DELETE FROM ProductTransaction where product_id=?";

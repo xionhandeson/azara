@@ -2,18 +2,8 @@ const helper = require('../utils/helper');
 const product_pdf = require('../services/ProductPdfService');
 const product_transaction_pdf = require('../services/ProductTransactionPdfService');
 
-//Create connection
-const sqlite3 = require('sqlite3').verbose();
-
-// open database in memory
-let db = new sqlite3.Database('./azara.db', (err) => {
-  if (err) {
-    return console.error(err.message);
-  }
-});
-
 module.exports = {
-	download_product_pdf: function(api) {
+	download_product_pdf: function(api, db) {
 		let sql = "";
 		api.post('/download_product_pdf',(req, res) => {
 			if (req.body.download_all != '' && req.body.download_all != undefined){
@@ -35,7 +25,7 @@ module.exports = {
 			});
 		});
 	},
-	download_product_transaction_pdf: function(api) {
+	download_product_transaction_pdf: function(api, db) {
 		let sql = "select * from ProductTransaction WHERE product_id = ? order by (substr(created_date, 7, 4) || '-' || substr(created_date, 4, 2) || '-' || substr(created_date, 1, 2)) desc";
 		let sql2 = "select * from product where id = ?";
 		api.post('/download_product_transaction_pdf',(req, res) => {

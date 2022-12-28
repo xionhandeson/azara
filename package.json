@@ -1,7 +1,7 @@
 {
   "name": "azara",
-  "version": "1.0.1",
-  "description": "azara calculator",
+  "version": "2.0.0",
+  "description": "Azara Inventory Manager",
   "main": "index.js",
   "scripts": {
     "postinstall": "install-app-deps",
@@ -12,7 +12,7 @@
     "make": "electron-forge make"
   },
   "keywords": [],
-  "author": "handeson",
+  "author": "Handeson",
   "license": "ISC",
   "dependencies": {
     "@mapbox/node-pre-gyp": "^1.0.9",
@@ -40,12 +40,12 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {"asar":true},
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "azara"
+            "name": "Azara"
           }
         },
         {

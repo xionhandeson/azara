@@ -3,18 +3,8 @@ const { dialog } = require("electron");
 const sql = require('../utils/SqlConstants');
 const product_service = require('../services/ProductService');
 
-//Create connection
-const sqlite3 = require('sqlite3').verbose();
-
-// open database in memory
-let db = new sqlite3.Database('./azara.db', (err) => {
-  if (err) {
-    return console.error(err.message);
-  }
-});
-
 module.exports = {
-	update_product_quantity: function(api) {
+	update_product_quantity: function(api, db) {
 		api.post('/update_quantity',(req, res) => {
 			let created_date = req.body.created_date == null || req.body.created_date == '' ? helper.created_date() : req.body.created_date;
 			let product_id = [req.body.product_id];
@@ -42,7 +32,7 @@ module.exports = {
 			});
 		});
 	},
-	update_product_transaction: function(api) {
+	update_product_transaction: function(api, db) {
 		api.post('/update_product_transaction',(req, res) => {
 			let created_date = req.body.created_date == null || req.body.created_date == '' ? helper.created_date() : req.body.created_date;
 			let product_id = [req.body.product_id];
@@ -72,7 +62,7 @@ module.exports = {
 			});
 		});
 	},
-	delete_product_transaction: function(api){
+	delete_product_transaction: function(api, db){
 		api.post('/delete_product_transaction',(req, res) => {
 			db.run(sql.PRODUCT_TRANSACTION_DELETE, req.body.id, (error) => {
 				db.get(sql.PRODUCT_SEARCH, req.body.product_id, (error, product) => {
