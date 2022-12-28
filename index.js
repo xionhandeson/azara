@@ -8,6 +8,7 @@ const hbs = require('hbs');
 const bodyParser = require('body-parser');
 const api = express();
 const product_api = require('./public/js/api');
+const pdf_api = require('./public/js/pdf_api');
 
 //Set Electron
 const { app, BrowserWindow } = require('electron')
@@ -72,8 +73,11 @@ product_api.delete_product_transaction(api)
 //delete product
 product_api.delete_product(api)
 
-//download pdf
-product_api.download_pdf(api)
+//download product pdf
+pdf_api.download_product_pdf(api)
+
+//download product transaction pdf
+pdf_api.download_product_transaction_pdf(api)
 
 //server listening
 api.listen(8000, () => {

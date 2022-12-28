@@ -1,7 +1,5 @@
-
 const helper = require('./helper');
 const { dialog } = require("electron");
-const pdf = require('./pdf');
 
 //Create connection
 const sqlite3 = require('sqlite3').verbose();
@@ -10,8 +8,10 @@ const sqlite3 = require('sqlite3').verbose();
 let db = new sqlite3.Database('./azara.db', (err) => {
   if (err) {
     return console.error(err.message);
-  }
-  console.log('Connected to the in-memory SQlite database.');
+  } else {
+		console.log('Connected to the in-memory SQlite database.');
+		create_tables(db);
+	}
 });
 
 module.exports = {
@@ -241,29 +241,6 @@ module.exports = {
 				});
 			});
 		});
-	},
-	download_pdf: function(api) {
-		let sql = "";
-		api.post('/download_pdf',(req, res) => {
-			if (req.body.download_all != '' && req.body.download_all != undefined){
-				sql = "SELECT * FROM Product order by code asc";
-			} else {
-			  sql = "SELECT * FROM Product where quantity > 0 order by code asc"
-			}
-			db.all(sql, (error, products) => {
-				if(error) console.log(error);
-				const stream = res.writeHead(200, {
-					'Content-Type': 'application/pdf',
-					'Content-Disposition': 'attachment; filename='+helper.created_date()+'_Azara_Stock.pdf'
-				});
-
-				pdf.buildPDF(
-					products,
-					(chunk) => stream.write(chunk),
-					() => stream.end()
-				);
-			});
-		});
 	}
 };
 
@@ -312,5 +289,18 @@ function get_multiple_product_by_code(data, res, req, db) {
 	});
 	res.render('main',{
 		products: products
+	});
+}
+
+function create_tables(db) {
+	let create_product_sql = 'CREATE TABLE IF NOT EXISTS "Product" ( "id" INTEGER NOT NULL UNIQUE, "code" TEXT NOT NULL UNIQUE, "quantity" INTEGER DEFAULT 0, "description" TEXT, "created_date" TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "modified_date" TEXT, PRIMARY KEY("id") )'
+	let create_product_transaction_sql = 'CREATE TABLE IF NOT EXISTS "ProductTransaction" ( "id" INTEGER NOT NULL, "product_id" INTEGER NOT NULL, "quantity_in" INTEGER DEFAULT 0, "quantity_out" INTEGER DEFAULT 0, "description" TEXT, "created_date" TEXT DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY("id" AUTOINCREMENT) )'
+
+	db.run(create_product_sql,(err) => {
+		db.run(create_product_transaction_sql,(err) => {
+			if (err) {
+				console.log(err)
+			}
+		});
 	});
 }

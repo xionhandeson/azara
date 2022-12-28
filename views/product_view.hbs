@@ -101,6 +101,30 @@
             </div>
           </div>
         </form>
+        <!-- Download PDF -->
+        <button type="button" id="download_pdf" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#downloadPDFModal">
+          Download PDF
+        </button>
+        <div class="modal fade" id="downloadPDFModal" tabindex="-1" aria-labelledby="downloadPDFModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="downloadPDFModalLabel">Download PDF</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-footer" style="text-align: left; display: block">
+                <form action="/download_product_transaction_pdf" method="post">
+                  <div class="col-md-6">
+                    <input type="submit" class="btn btn-primary" class="form-control" value="All">
+                    <input type="hidden" name="product_id" value={{row.id}}>
+                    <input type="hidden" name="product_code" value={{row.code}}>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Download PDF End-->
     </div>
     <h3>Code: {{ row.code }}</h3>
     <h3>STOCK BALANCE: {{ row.quantity }}</h3>
