@@ -10,16 +10,18 @@ module.exports = {
 			let product_id = [req.body.product_id];
 			let insert_product_transaction_sql;
 			db.get(sql.PRODUCT_SEARCH, product_id, (error, product) => {
-				if(req.body.quantity_in != null) {
+				if(req.body.quantity_in != null && req.body.quantity_in != undefined && req.body.quantity_in != '' && parseInt(req.body.quantity_in) > 0) {
 					quantity = parseInt(req.body.quantity_in)
 					total_quantity = product.quantity + quantity
 					insert_product_transaction_sql = "INSERT INTO ProductTransaction(product_id, quantity_in, description, created_date) VALUES(?, ?, ?, ?)";
-				} else if (req.body.quantity_out != null) {
+				} else if (req.body.quantity_out != null && req.body.quantity_out != undefined && req.body.quantity_out != '' && parseInt(req.body.quantity_out) > 0) {
 					quantity = parseInt(req.body.quantity_out)
 					total_quantity = product.quantity - quantity
 					insert_product_transaction_sql = "INSERT INTO ProductTransaction(product_id, quantity_out, description, created_date) VALUES(?, ?, ?, ?)";
 				} else {
-					console.log("Invalid quantity entered")
+					dialog.showErrorBox("Error", "Invalid quantity entered")
+					product_service.get_product_by_code([product.code], res, req, db)
+					return;
 				}
 				if(error) console.log(error);
 				db.run(insert_product_transaction_sql, [product_id, quantity, req.body.description, created_date], (err) => {
@@ -38,16 +40,18 @@ module.exports = {
 			let product_id = [req.body.product_id];
 			db.get(sql.PRODUCT_SEARCH, product_id, (error, product) => {
 				db.get(sql.PRODUCT_TRANSACTION_SEARCH_BY_ID, req.body.id, (error, productTransaction) => {
-					if(req.body.quantity_in != null) {
+					if(req.body.quantity_in != null && req.body.quantity_in != undefined && req.body.quantity_in != '' && parseInt(req.body.quantity_in) > 0) {
 						quantity = parseInt(req.body.quantity_in)
 						total_quantity = product.quantity + (quantity - productTransaction.quantity_in)
 						insert_product_transaction_sql = "UPDATE ProductTransaction SET quantity_in = ?, description = ?, created_date  = ? WHERE id = ?";
-					} else if (req.body.quantity_out != null) {
+					} else if (req.body.quantity_out != null  && req.body.quantity_out != undefined && req.body.quantity_out != '' && parseInt(req.body.quantity_out) > 0) {
 						quantity = parseInt(req.body.quantity_out)
 						total_quantity = product.quantity + (productTransaction.quantity_out - quantity)
 						insert_product_transaction_sql = "UPDATE ProductTransaction SET quantity_out = ?, description = ?, created_date  = ? WHERE id = ?";
 					} else {
-						console.log("Invalid quantity entered")
+						dialog.showErrorBox("Error", "Invalid quantity entered")
+						product_service.get_product_by_code([product.code], res, req, db)
+						return;
 					}
 					if(error) console.log(error);
 					db.run(insert_product_transaction_sql, [quantity, req.body.description, created_date, req.body.id], (err) => {

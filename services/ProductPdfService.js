@@ -10,21 +10,30 @@ function buildPDF(products, dataCallback, endCallback) {
 
 	product_array = [];
 	filtered_product_array = [];
+	i = 1;
+	total_quantity = 0;
+
 	products.forEach((product) => {
-		product_array.push(product.code, product.quantity, product.description.replace('\r\n', ""));
+		product_array.push(i, product.code, product.quantity, product.description.replace('\r\n', ""));
+		total_quantity += parseInt(product.quantity);
+		i++;
 	});
 	while(product_array.length) {
-		filtered_product_array.push(product_array.splice(0,3))
+		filtered_product_array.push(product_array.splice(0,4))
   }
 
+	doc.fontSize(25).text("GRAND TOTAL:" + total_quantity);
+
+	console.log(filtered_product_array)
+
   const table01 = {
-		"headers" : ["Code", "Stock Balance", "Description"],
+		"headers" : ["ID", "Code", "Stock Balance", "Description"],
 		"rows": filtered_product_array
 	 };
 	 doc.table(table01, {
 		 columnSpacing: 5,
 		 padding: 5,
-		 columnsSize: [100, 100, 200],
+		 columnsSize: [25, 100, 100, 200],
 		 prepareHeader: () => doc.fontSize(14), // {Function}
 		 prepareRow: (row, indexColumn, indexRow, rectRow, rectCell) => {
 
