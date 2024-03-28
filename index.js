@@ -17,8 +17,6 @@ const pdf_api = require('./controller/PdfController');
 //Set Electron
 const { app, BrowserWindow } = require('electron')
 
-console.log(app.getPath('appData'));
-
 let db = new sqlite3.Database(app.getPath('appData')+"/azara.db", (err) => {
   if (err) {
     return console.error(err.message);
@@ -134,11 +132,27 @@ api.use(bodyParser.urlencoded({ extended: false }));
 //set public folder as static folder for static file
 api.use('/assets',express.static(__dirname + '/public'));
 
+hbs.registerHelper('ifCond', function(v1, v2, options) {
+  if (v1 === v2) {
+      return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
+hbs.registerHelper('minus', function(a, b) {
+  return a - b;
+});
+
+hbs.registerHelper('plus', function(a, b) {
+  return a + b;
+});
+
 //Homepage
 home_api.load_homepage(app, api, db)
 
 //Product
 product_api.insert_product(api, db)
+product_api.view_product(api, db)
 product_api.search_product_by_code(api, db)
 product_api.update_product_by_code(api, db)
 product_api.delete_product(api, db)
@@ -150,6 +164,7 @@ product_transaction_api.delete_product_transaction(api, db)
 
 //PDF
 pdf_api.download_product_pdf(api, db)
+pdf_api.download_product_pdf_by_warehouse_code(api, db)
 pdf_api.download_product_transaction_pdf(api, db)
 
 //server listening

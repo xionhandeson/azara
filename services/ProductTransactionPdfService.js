@@ -28,6 +28,7 @@ function buildPDF(product_transactions, product, dataCallback, endCallback) {
 	 };
 
 	 doc.fontSize(25).text("Code:" + product.code);
+	 doc.fontSize(25).text("Warehouse:" + product.warehouse_code);
 	 doc.fontSize(25).text("STOCK BALANCE:" + product.quantity);
 	 doc.fontSize(25).text("TOTAL IN:" + total_quantity_in);
 	 doc.fontSize(25).text("TOTAL OUT:" + total_quantity_out);
