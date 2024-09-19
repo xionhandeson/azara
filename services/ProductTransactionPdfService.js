@@ -28,6 +28,7 @@ function buildPDF(product_transactions, product, dataCallback, endCallback) {
 	 };
 
 	 doc.fontSize(25).text("Code:" + product.code);
+	 doc.fontSize(25).text("Warehouse:" + product.warehouse_code);
 	 doc.fontSize(25).text("STOCK BALANCE:" + product.quantity);
 	 doc.fontSize(25).text("TOTAL IN:" + total_quantity_in);
 	 doc.fontSize(25).text("TOTAL OUT:" + total_quantity_out);
@@ -36,7 +37,7 @@ function buildPDF(product_transactions, product, dataCallback, endCallback) {
 		 columnSpacing: 5,
 		 padding: 5,
 		 columnsSize: [100, 100, 200, 100],
-		 prepareHeader: () => doc.fontSize(14), // {Function}
+		 prepareHeader: () => doc.fontSize(10), // {Function}
 		 prepareRow: (row, indexColumn, indexRow, rectRow, rectCell) => {
 
 			 const {x, y, width, height} = rectCell;

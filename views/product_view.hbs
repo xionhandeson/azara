@@ -7,14 +7,28 @@
 <body>
   <a class="btn btn-default" href="/">Back to Main Page</a>
   <div class="container">
-    <h2>Product Details</h2>
+    <div class="row align-items-center">
+        <div class="col-sm-3">
+            <h2>Product Details</h2>
+        </div>
+        <div class="col-sm-9 d-flex justify-content-end">
+            <button type="button" class="btn btn-primary me-1" data-bs-toggle="modal" data-bs-target="#searchProductModal">
+                Search Product
+            </button>
+            <button type="button" class="btn btn-primary me-1" data-bs-toggle="modal" data-bs-target="#QuantityInModal">
+                Quantity In
+            </button>
+            <button type="button" class="btn btn-primary me-1" data-bs-toggle="modal" data-bs-target="#QuantityOutModal">
+                Quantity Out
+            </button>
+            <button type="button" id="download_pdf" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#downloadPDFModal">
+                Download PDF
+            </button>
+        </div>
+    </div>
     <div class="container" style="text-align: right;">
+        <!-- Search Product -->
         <form action="/search_product_by_code" method="post">
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#searchProductModal">
-              Search Product
-          </button>
-
-          <!-- Search Product -->
           <div class="modal fade" id="searchProductModal" tabindex="-1" aria-labelledby="searchProductModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -37,10 +51,6 @@
         </form>
         <!-- Quantity In -->
         <form action="/update_quantity" method="post">
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#QuantityInModal">
-              Quantity In
-          </button>
-
           <div class="modal fade" id="QuantityInModal" tabindex="-1" aria-labelledby="QuantityInModal" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -51,7 +61,7 @@
                 <div class="modal-body">
                   <div class="form-group" style="margin-bottom: 10px;">
                       <input type="text" name="quantity_in" class="form-control" id="quantity_in" autofocus="autofocus" placeholder="Quantity In">
-                      <input type="hidden" name="product_id" value={{row.id}}>
+                      <input type="hidden" name="product_id" value={{product.id}}>
                   </div>
                   <div class="form-group" style="margin-bottom: 10px;">
                       <input type="text" id="created_date" name="created_date" class="form-control" placeholder="Stock In Date">
@@ -70,10 +80,6 @@
         </form>
         <!-- Quantity Out -->
         <form action="/update_quantity" method="post">
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#QuantityOutModal">
-              Quantity Out
-          </button>
-
           <div class="modal fade" id="QuantityOutModal" tabindex="-1" aria-labelledby="QuantityOutModal" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -84,7 +90,7 @@
                 <div class="modal-body">
                   <div class="form-group" style="margin-bottom: 10px;">
                       <input type="text" name="quantity_out" class="form-control" id="quantity_out" autofocus="autofocus" placeholder="Quantity Out">
-                      <input type="hidden" name="product_id" value={{row.id}}>
+                      <input type="hidden" name="product_id" value={{product.id}}>
                   </div>
                   <div class="form-group" style="margin-bottom: 10px;">
                       <input type="text" id="stock_out_date" name="created_date" class="form-control" placeholder="Stock Out Date">
@@ -102,9 +108,6 @@
           </div>
         </form>
         <!-- Download PDF -->
-        <button type="button" id="download_pdf" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#downloadPDFModal">
-          Download PDF
-        </button>
         <div class="modal fade" id="downloadPDFModal" tabindex="-1" aria-labelledby="downloadPDFModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -116,8 +119,8 @@
                 <form action="/download_product_transaction_pdf" method="post">
                   <div class="col-md-6">
                     <input type="submit" class="btn btn-primary" class="form-control" value="All">
-                    <input type="hidden" name="product_id" value={{row.id}}>
-                    <input type="hidden" name="product_code" value={{row.code}}>
+                    <input type="hidden" name="product_id" value={{product.id}}>
+                    <input type="hidden" name="product_code" value={{product.code}}>
                   </div>
                 </form>
               </div>
@@ -126,22 +129,23 @@
         </div>
         <!-- Download PDF End-->
     </div>
-    <h3>Code: {{ row.code }}</h3>
-    <h3>STOCK BALANCE: {{ row.quantity }}</h3>
+    <h3>Code: {{ product.code }}</h3>
+    <h3>Warehouse: {{ product.warehouse_code }}</h3>
+    <h3>STOCK BALANCE: {{ formatNumber product.quantity }}</h3>
     <div class="row">
       <div class="col-sm-4">
-        <h3>TOTAL IN: {{ total_quantity_in }}</h3>
+        <h3>TOTAL IN: {{ formatNumber total_quantity_in }}</h3>
       </div>
       <div class="col-sm-8">
-        <p style="text-align:right">Description: {{ row.description }}</p>
+        <p style="text-align:right">Description: {{ product.description }}</p>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-4">
-        <h3>TOTAL OUT: {{ total_quantity_out }}</h3>
+        <h3>TOTAL OUT: {{ formatNumber total_quantity_out }}</h3>
       </div>
-      <div class="col-sm-12">
-        <p style="text-align:right">Date Created: {{ row.created_date }}</p>
+      <div class="col-sm-8">
+        <p style="text-align:right">Date Created: {{ product.created_date }}</p>
       </div>
     </div>
     <table class="table table-striped">
@@ -155,10 +159,10 @@
         </tr>
       </thead>
       <tbody>
-        {{#each rows}}
+        {{#each products}}
         <tr>
-          <td>{{ quantity_in }}</td>
-          <td>{{ quantity_out }}</td>
+          <td>{{ formatNumber quantity_in }}</td>
+          <td>{{ formatNumber quantity_out }}</td>
           <td>{{ description }}</td>
           <td>{{ created_date }}</td>
           <td>
