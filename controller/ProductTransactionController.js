@@ -84,7 +84,6 @@ module.exports = {
 
 						await insertProductTransaction(db, insert_product_transaction_sql, [product_id, quantity, req.body.description, created_date]);
 						await updateProductQuantity(db, product_id, total_quantity);
-						console.log("here")
 						product_service.view_product([product.id], res, req, db);
 				} catch (error) {
 						console.error(error);

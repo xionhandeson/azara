@@ -61,7 +61,6 @@ module.exports = {
         api.post('/download_product_pdf_by_warehouse_code', async (req, res) => {
             try {
                 const products = await getProductsByWarehouseCode(db, req.body.warehouse_code);
-                console.log(products);
                 const stream = res.writeHead(200, {
                     'Content-Type': 'application/pdf',
                     'Content-Disposition': 'attachment; filename='+helper.created_date()+'_Azara_Stock_Warehouse_'+req.body.warehouse_code+'.pdf'

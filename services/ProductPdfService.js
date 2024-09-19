@@ -15,7 +15,7 @@ function buildPDF(products, dataCallback, endCallback) {
 
 	products.forEach((product) => {
 		product_array.push(i, product.code, product.warehouse_code ?? '', product.quantity, product.description.replace('\r\n', ""));
-		total_quantity += parseInt(product.quantity);
+		total_quantity += parseInt(product.quantity) || 0;
 		i++;
 	});
 	while(product_array.length) {
@@ -24,17 +24,15 @@ function buildPDF(products, dataCallback, endCallback) {
 
 	doc.fontSize(25).text("GRAND TOTAL:" + total_quantity);
 
-	console.log(filtered_product_array)
-
   const table01 = {
-		"headers" : ["ID", "Code", "Warehouse", "Stock Balance", "Description"],
+		"headers" : ["ID", "Code", "WH", "Stk. Blc.", "Description"],
 		"rows": filtered_product_array
 	 };
 	 doc.table(table01, {
 		 columnSpacing: 5,
 		 padding: 5,
-		 columnsSize: [75, 100, 75, 50, 200],
-		 prepareHeader: () => doc.fontSize(14), // {Function}
+		 columnsSize: [75, 100, 50, 50, 200],
+		 prepareHeader: () => doc.fontSize(10), // {Function}
 		 prepareRow: (row, indexColumn, indexRow, rectRow, rectCell) => {
 
 			 const {x, y, width, height} = rectCell;

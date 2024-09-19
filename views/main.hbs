@@ -28,7 +28,7 @@
               </div>
 
               <div class="form-group" style="margin-bottom: 10px;">
-                  <input type="text" name="quantity" class="form-control" placeholder="Quantity">
+                  <input type="text" id="quantity" name="quantity" class="form-control" placeholder="Quantity">
               </div>
 
               <div class="form-group" style="margin-bottom: 10px;">
@@ -133,6 +133,27 @@
       </div>
     </div>
     <p>Clear search product fields to refresh table</p>
+    <ul class="pagination justify-content-center pagination-list">
+        <li class="page-item {{#unless hasPrevious}}disabled{{/unless}}">
+            <a class="page-link" href="?page={{minus currentPage 1}}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="visually-hidden">Previous</span>
+            </a>
+        </li>
+
+        {{#each pageArray}}
+            <li class="page-item {{#ifCond this ../currentPage}}active{{/ifCond}}">
+                <a class="page-link" href="?page={{this}}">{{this}}</a>
+            </li>
+        {{/each}}
+
+        <li class="page-item {{#unless hasNext}}disabled{{/unless}}">
+            <a class="page-link" href="?page={{plus currentPage 1}}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="visually-hidden">Next</span>
+            </a>
+        </li>
+    </ul>
     <table class="table table-striped" style="font-size: 20px">
       <thead>
         <tr>
@@ -149,7 +170,7 @@
         <tr>
           <td>{{ code }}</td>
           <td>{{ warehouse_code }}</td>
-          <td>{{ quantity }}</td>
+          <td>{{ formatNumber quantity }}</td>
           <td>{{ description }}</td>
           <td>{{ created_date }}</td>
           <td>
@@ -216,27 +237,6 @@
         {{/each}}
       </tbody>
     </table>
-    <ul class="pagination justify-content-center pagination-list">
-        <li class="page-item {{#unless hasPrevious}}disabled{{/unless}}">
-            <a class="page-link" href="?page={{minus currentPage 1}}" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="visually-hidden">Previous</span>
-            </a>
-        </li>
-
-        {{#each pageArray}}
-            <li class="page-item {{#ifCond this ../currentPage}}active{{/ifCond}}">
-                <a class="page-link" href="?page={{this}}">{{this}}</a>
-            </li>
-        {{/each}}
-
-        <li class="page-item {{#unless hasNext}}disabled{{/unless}}">
-            <a class="page-link" href="?page={{plus currentPage 1}}" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="visually-hidden">Next</span>
-            </a>
-        </li>
-    </ul>
   </div>
 <script src="assets/js/jquery.js"></script>
 <script src="assets/js/bootstrap.js"></script>

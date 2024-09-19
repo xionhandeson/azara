@@ -17,7 +17,7 @@ const pdf_api = require('./controller/PdfController');
 //Set Electron
 const { app, BrowserWindow } = require('electron')
 
-let db = new sqlite3.Database(app.getPath('appData')+"/azara.db", (err) => {
+let db = new sqlite3.Database("./azara.db", (err) => {
   if (err) {
     return console.error(err.message);
   } else {
@@ -145,6 +145,10 @@ hbs.registerHelper('minus', function(a, b) {
 
 hbs.registerHelper('plus', function(a, b) {
   return a + b;
+});
+
+hbs.registerHelper('formatNumber', function(number) {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 });
 
 //Homepage

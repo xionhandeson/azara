@@ -31,7 +31,7 @@ function view_product(data, res, req, db) {
 function get_product_by_code(data, res, req, db) {
 	db.all(sql.PRODUCT_SEARCH_BY_CODE, data, (error, products) => {
 			if(error || products == undefined || products.length === 0) {
-					log.info("Error: Product doesn't exist");
+					console.log("Error: Product doesn't exist");
 					dialog.showErrorBox("Error", "Product doesn't exist");
 					res.redirect('/');
 					return;

@@ -37,7 +37,7 @@ function buildPDF(product_transactions, product, dataCallback, endCallback) {
 		 columnSpacing: 5,
 		 padding: 5,
 		 columnsSize: [100, 100, 200, 100],
-		 prepareHeader: () => doc.fontSize(14), // {Function}
+		 prepareHeader: () => doc.fontSize(10), // {Function}
 		 prepareRow: (row, indexColumn, indexRow, rectRow, rectCell) => {
 
 			 const {x, y, width, height} = rectCell;

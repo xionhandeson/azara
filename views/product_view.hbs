@@ -131,10 +131,10 @@
     </div>
     <h3>Code: {{ product.code }}</h3>
     <h3>Warehouse: {{ product.warehouse_code }}</h3>
-    <h3>STOCK BALANCE: {{ product.quantity }}</h3>
+    <h3>STOCK BALANCE: {{ formatNumber product.quantity }}</h3>
     <div class="row">
       <div class="col-sm-4">
-        <h3>TOTAL IN: {{ total_quantity_in }}</h3>
+        <h3>TOTAL IN: {{ formatNumber total_quantity_in }}</h3>
       </div>
       <div class="col-sm-8">
         <p style="text-align:right">Description: {{ product.description }}</p>
@@ -142,7 +142,7 @@
     </div>
     <div class="row">
       <div class="col-sm-4">
-        <h3>TOTAL OUT: {{ total_quantity_out }}</h3>
+        <h3>TOTAL OUT: {{ formatNumber total_quantity_out }}</h3>
       </div>
       <div class="col-sm-8">
         <p style="text-align:right">Date Created: {{ product.created_date }}</p>
@@ -161,8 +161,8 @@
       <tbody>
         {{#each products}}
         <tr>
-          <td>{{ quantity_in }}</td>
-          <td>{{ quantity_out }}</td>
+          <td>{{ formatNumber quantity_in }}</td>
+          <td>{{ formatNumber quantity_out }}</td>
           <td>{{ description }}</td>
           <td>{{ created_date }}</td>
           <td>

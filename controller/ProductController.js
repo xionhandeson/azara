@@ -39,7 +39,6 @@ module.exports = {
           // Prepare data for service and determine which service to use
           let data;
           let service;
-          log.info("code", code)
           if (code && warehouse_code) {
               data = [code.toUpperCase(), warehouse_code.toUpperCase()];
               service = product_service.get_product_search_by_code_and_warehouse_code;
@@ -50,7 +49,6 @@ module.exports = {
               data = codes.toUpperCase().split(',');
               service = product_service.get_multiple_product_by_code;
           } else {
-                log.info("here?")
               data = [code.toUpperCase()];
               service = product_service.get_product_by_code;
           }
